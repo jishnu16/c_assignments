@@ -34,11 +34,54 @@ void dispose(ArrayUtil array){
 }
 
 int findIndex(ArrayUtil util, void *element){
-  char *list = (char *)util.base;
+  char *ptr = (char *)util.base;
   for(int i = 0; i < util.length; i++){
-    if(memcmp(list, element, util.typeSize) == 0)
+    if(memcmp(ptr, element, util.typeSize) == 0)
       return i;
-    list += util.typeSize;
+    ptr += util.typeSize;
   }
   return -1;
+}
+
+int isEven(void* hint, void* item){
+  int *number = (int *)(item);
+  return !(*number % 2);
+}
+
+int isDivisable(void *hint, void *item){
+  int *dividend = (int *)(item);
+  int *divisor = (int *)(hint);
+
+  if(*dividend % *divisor == 0)
+    return 1;
+  return 0;
+
+}
+
+void * findFirst(ArrayUtil util, MatchFunc* match, void * hint){
+  int *prt = util.base;
+  for(int i = 0; i < util.length ; i++){
+    if(match(hint, &prt[i]))
+      return &prt[i];
+  }
+  return NULL;
+}
+
+void * findLast(ArrayUtil util, MatchFunc* match, void * hint){
+  int *prt = util.base;
+  for(int i = util.length-1; i >= 0 ; i--){
+    if(match(hint, &prt[i]))
+      return &prt[i];
+  }
+  return NULL;
+}
+
+int count(ArrayUtil util, MatchFunc* match, void *hint){
+    int *ptr = util.base;
+    int counter = 0;
+    for(int i = 0; i < util.length ; i++){
+      if(match(hint, &ptr[i]))
+        counter++;
+    }
+    return counter;
 }
