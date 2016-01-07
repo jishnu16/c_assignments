@@ -17,3 +17,4 @@ int isEven(void *,void *);
 int isDivisable(void *,void *);
 void *findLast(ArrayUtil,MatchFunc*,void *);
 int count(ArrayUtil,MatchFunc*,void*);
+int filter(ArrayUtil,MatchFunc*,void*,void** ,int);

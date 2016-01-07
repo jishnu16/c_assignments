@@ -85,3 +85,21 @@ int count(ArrayUtil util, MatchFunc* match, void *hint){
     }
     return counter;
 }
+
+
+int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int maxItems ){
+  int counter = 0;
+  void *base_ptr = (void *)util.base;
+  void **dest_ptr = destination;
+  for (int i = 0; i < util.length; i++) {
+    if (match(hint,base_ptr)==1 && counter<maxItems){
+			printf("%d COUNTER inside if condition\n",counter );
+      *dest_ptr = base_ptr;
+			dest_ptr++;
+      counter++;
+    }
+		printf("%d COUNTER Skipped\n",counter );
+    base_ptr+=util.typeSize;
+  }
+  return counter;
+};

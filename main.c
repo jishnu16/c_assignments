@@ -108,6 +108,28 @@ void test_array_util_count(){
 	dispose(util);
 }
 
+void test_array_util_filter(){
+  ArrayUtil a = create(4,5);
+  int * list_array = (int *)(a.base);
+  list_array[0] = 12;
+  list_array[1] = 25;
+  list_array[2] = 34;
+  list_array[3] = 45;
+  list_array[4] = 50;
+
+  ArrayUtil destination = create(4,5);
+
+  assert(filter(a, &isEven, NULL, destination.base, 5 ) == 3 );
+
+	int **new_destination = (int **)destination.base;
+
+  assert(*new_destination[0]==12);
+	assert(*new_destination[1]==34);
+	assert(*new_destination[2]==50);
+
+
+}
+
 int main(void)
 {
 	test_array_util_create();
@@ -116,6 +138,7 @@ int main(void)
 	test_array_util_findIndex();
 	test_array_util_findFirst();
 	test_array_util_findLast();
+	test_array_util_filter();
 
 	return 0;
 }
