@@ -128,6 +128,55 @@ void test_array_util_filter(){
 	assert(*new_destination[2]==50);
 }
 
+void test_array_map(){
+  ArrayUtil a = create(4,4);
+  ArrayUtil b = create(4,4);
+	int hint = 8;
+  int *newA = (int *)a.base;
+  newA[0] = 10;
+  newA[1] = 21;
+  newA[2] = 2;
+  newA[3] = 18;
+  int *newB = (int *)b.base;
+  map(a,b, &convert_plus,&hint);
+  assert(18 == newB[0]);
+  assert(29 == newB[1]);
+  assert(10 == newB[2]);
+  assert(26 == newB[3]);
+}
+
+void test_array_util_forEach(){
+  ArrayUtil a = create(4,4);
+  int *newA = (int *)a.base;
+	int hint = 8;
+  newA[0] = 10;
+  newA[1] = 21;
+  newA[2] = 2;
+  newA[3] = 18;
+  forEach(a,&operation_minus,&hint);
+  assert(2 == newA[0]);
+  assert(13 == newA[1]);
+  assert(-6 == newA[2]);
+  assert(10 == newA[3]);
+}
+
+void test_array_util_reduce(){
+  int item = 10;
+	int initialValue = 0;
+	int previous = 2;
+  ArrayUtil a = create(4,4);
+  int *newA = (int *)a.base;
+  newA[0] = 10;
+  newA[1] = 21;
+  newA[2] = 2;
+  newA[3] = 18;
+  int hint = 0;
+  void* result = reduce(a,&reduce_sum,&hint,&initialValue);
+  assert(51 == initialValue);
+  assert(*(int*)result == initialValue);
+  assert(result == &initialValue);
+}
+
 int main(void)
 {
 	test_array_util_create();
@@ -137,6 +186,9 @@ int main(void)
 	test_array_util_findFirst();
 	test_array_util_findLast();
 	test_array_util_filter();
+	test_array_map();
+	test_array_util_forEach();
+	test_array_util_reduce();
 
 	return 0;
 }

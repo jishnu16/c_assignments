@@ -93,12 +93,10 @@ int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int
   void **dest_ptr = destination;
   for (int i = 0; i < util.length; i++) {
     if (match(hint,base_ptr)==1 && counter<maxItems){
-			printf("%d COUNTER inside if condition\n",counter );
       *dest_ptr = base_ptr;
 			dest_ptr++;
       counter++;
     }
-		printf("%d COUNTER Skipped\n",counter );
     base_ptr+=util.typeSize;
   }
   return counter;
@@ -110,4 +108,46 @@ void convert_plus(void* hint, void* sourceItem, void* destinationItem){
   int *dest_ptr = (int *)destinationItem;
   int value = *hint_ptr + *source_ptr;
   *dest_ptr = value;
+}
+
+void map(ArrayUtil source, ArrayUtil destination, ConvertFunc* convert, void* hint){
+  void *base_ptr = (void *)source.base;
+  void *dest_ptr = (void *)destination.base;
+  for (int i = 0; i < source.length; i++) {
+        convert(hint,base_ptr,dest_ptr);
+        base_ptr+=source.typeSize;
+        dest_ptr+=destination.typeSize;
+    }
+}
+
+void operation_minus(void* hint, void* item){
+  int *h = (int *)hint;
+  int *i = (int *)item;
+  int value = *i - *h;
+  *i = value;
+}
+
+void forEach(ArrayUtil util, OperationFunc* operation, void* hint){
+  void *base_ptr = (void *)util.base;
+  for (int i = 0; i < util.length; i++) {
+        operation(hint,base_ptr);
+        base_ptr+=util.typeSize;
+    }
+}
+
+void* reduce_sum(void* hint, void* previousItem, void* item){
+  int *h = (int *)hint;
+  int *previous = (int *)previousItem;
+  int *i = (int *)item;
+  *previous+=*i;
+  return previous;
+}
+
+void* reduce(ArrayUtil util, ReducerFunc* reducer, void* hint, void* intialValue){
+  void *base_ptr = (void *)util.base;
+  for (int i = 0; i < util.length; i++) {
+    reducer(hint,intialValue,base_ptr);
+    base_ptr+=util.typeSize;
+  }
+  return intialValue;
 }
