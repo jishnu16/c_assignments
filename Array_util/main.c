@@ -126,8 +126,6 @@ void test_array_util_filter(){
   assert(*new_destination[0]==12);
 	assert(*new_destination[1]==34);
 	assert(*new_destination[2]==50);
-
-
 }
 
 int main(void)

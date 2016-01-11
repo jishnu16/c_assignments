@@ -103,3 +103,11 @@ int filter(ArrayUtil util, MatchFunc* match, void* hint, void** destination, int
   }
   return counter;
 };
+
+void convert_plus(void* hint, void* sourceItem, void* destinationItem){
+  int *hint_ptr = (int *)hint;
+  int *source_ptr = (int *)sourceItem;
+  int *dest_ptr = (int *)destinationItem;
+  int value = *hint_ptr + *source_ptr;
+  *dest_ptr = value;
+}
