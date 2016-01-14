@@ -274,3 +274,30 @@ void test_filter(){
   assert(*(int *)list1.first->next->next->element==300);
 	assert(*(int *)list1.last->element==405);
 };
+
+void test_reverse(){
+	LinkedList list = createList();
+	void *value1 = malloc(sizeof(int));
+	*(int *)value1 = 100;
+	void *value2 = malloc(sizeof(int));
+	*(int *)value2 = 200;
+	void *value3 = malloc(sizeof(int));
+	*(int *)value3 = 300;
+	void *value4 = malloc(sizeof(int));
+	*(int *)value4 = 400;
+	void *value5 = malloc(sizeof(int));
+	*(int *)value5 = 500;
+  add_to_list(&list,value1);
+	add_to_list(&list,value2);
+	add_to_list(&list,value3);
+	add_to_list(&list,value4);
+	add_to_list(&list,value5);
+
+	LinkedList list1 = reverse(list);
+	assert(list1.length==5);
+	assert(*(int *)list1.first->element==500);
+	assert(*(int *)list1.first->next->element==400);
+	assert(*(int *)list1.first->next->next->element==300);
+	assert(*(int *)list1.first->next->next->next->element==200);
+  assert(*(int*)list1.last->element == 100);
+};
