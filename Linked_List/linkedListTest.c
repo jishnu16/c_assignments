@@ -136,15 +136,141 @@ void test_getElementAt(){
 	assert(resultNull==NULL);
 };
 
+void test_indexOf(){
+	LinkedList list = createList();
+	void *value1 = malloc(sizeof(int));
+	*(int *)value1 = 100;
+	void *value2 = malloc(sizeof(int));
+	*(int *)value2 = 200;
+	void *value3 = malloc(sizeof(int));
+	*(int *)value3 = 300;
+	void *value4 = malloc(sizeof(int));
+	*(int *)value4 = 400;
+	add_to_list(&list,value1);
+	add_to_list(&list,value2);
+	add_to_list(&list,value3);
+	add_to_list(&list,value4);
+	assert(indexOf(list,value2)==1);
+  assert(indexOf(list,value4)==3);
+};
 
+void test_deleteElementAt(){
+	LinkedList list = createList();
+	void *value1 = malloc(sizeof(int));
+	*(int *)value1 = 100;
+	void *value2 = malloc(sizeof(int));
+	*(int *)value2 = 200;
+	void *value3 = malloc(sizeof(int));
+	*(int *)value3 = 300;
+	void *value4 = malloc(sizeof(int));
+	*(int *)value4 = 400;
+	void *value5 = malloc(sizeof(int));
+	*(int *)value5 = 500;
+	add_to_list(&list,value1);
+	add_to_list(&list,value2);
+	add_to_list(&list,value3);
+	add_to_list(&list,value4);
+	add_to_list(&list,value5);
 
-int main(){
-  test_createList();
-  test_add_to_list();
-  test_get_last_element();
-  test_get_first_element();
-  test_add_ten_forEach();
-  test_getElementAt();
+	assert(*(int *)deleteElementAt(&list,4)==500);
+	assert(*(int *)list.last->element==400);
+	assert(list.length==4);
+	assert(*(int *)deleteElementAt(&list,0)==100);
+	assert(*(int *)list.last->element==400);
+	assert(*(int *)list.first->element==200);
+	assert(list.length==3);
+	assert(*(int *)deleteElementAt(&list,1)==300);
+	assert(*(int *)list.last->element==400);
+	assert(*(int *)list.first->element==200);
+	assert(list.length==2);
+};
 
+void test_asArray(){
+	LinkedList list = createList();
+	void *value1 = malloc(sizeof(int));
+	*(int *)value1 = 100;
+	void *value2 = malloc(sizeof(int));
+	*(int *)value2 = 200;
+	void *value3 = malloc(sizeof(int));
+	*(int *)value3 = 300;
+	void *value4 = malloc(sizeof(int));
+	*(int *)value4 = 400;
+	void *value5 = malloc(sizeof(int));
+	*(int *)value5 = 500;
+	add_to_list(&list,value1);
+	add_to_list(&list,value2);
+	add_to_list(&list,value3);
+	add_to_list(&list,value4);
+	add_to_list(&list,value5);
+
+	void *result[8],*result1[10];
+	int arrayLength = asArray(list,result,3);
+	assert(arrayLength==3);
+	Node *start = list.first;
+	for (int i = 0; i < arrayLength; i++){
+		assert(*(int *)start->element == *(int *)result[i]);
+		start = start->next;
+	}
+	assert(*(int *)start->element!=*(int *)result[3]);
+	arrayLength = asArray(list,result1,10);
+	assert(arrayLength==5);
+	start = list.first;
+	for (int i = 0; i < arrayLength; i++){
+		assert(*(int *)start->element == *(int *)result1[i]);
+		start = start->next;
+	}
+};
+
+int isEven(void* hint, void* item){
+  if(hint !=0)
+	   return !(*(int *)item % 2);
   return 0;
+};
+
+int isOdd(void *hint,void *item){
+	return !isEven(hint,item);
+};
+
+int isDivisibleBy(void* hint, void* item){
+	return !(*(int *)item % *(int *)hint);
 }
+
+void test_filter(){
+	LinkedList list = createList();
+	void *value1 = malloc(sizeof(int));
+	*(int *)value1 = 100;
+	void *value2 = malloc(sizeof(int));
+	*(int *)value2 = 200;
+	void *value3 = malloc(sizeof(int));
+	*(int *)value3 = 300;
+	void *value4 = malloc(sizeof(int));
+	*(int *)value4 = 399;
+	void *value5 = malloc(sizeof(int));
+	*(int *)value5 = 405;
+	add_to_list(&list,value1);
+	add_to_list(&list,value2);
+	add_to_list(&list,value3);
+	add_to_list(&list,value4);
+	add_to_list(&list,value5);
+
+	void *hint = NULL;
+	LinkedList list1 = filter(list,isEven,&hint);
+	assert(list1.length==3);
+	assert(*(int *)list1.first->element==100);
+	assert(*(int *)list1.first->next->element==200);
+  assert(*(int *)list1.last->element==300);
+
+
+	list1 = filter(list,isOdd,&hint);
+	assert(list1.length==2);
+	assert(*(int *)list1.first->element==399);
+	assert(*(int *)list1.last->element==405);
+
+	int divisibleBy = 5;
+	list1 = filter(list,isDivisibleBy,&divisibleBy);
+	assert(list1.length==4);
+	assert(*(int *)list1.first->element==100);
+	assert(*(int *)list1.first->next->element==200);
+  assert(*(int *)list1.first->next->next->element==300);
+	assert(*(int *)list1.last->element==405);
+};
