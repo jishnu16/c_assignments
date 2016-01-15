@@ -336,3 +336,27 @@ void test_map(){
 
 	assert(list1.length==5);
 };
+
+void sum(void* hint, void* previousItem, void* item){
+	*(int *)previousItem = *(int *)hint + *(int *)previousItem + *(int *)item;
+}
+void test_reduce(){
+	LinkedList list = createList();
+	void *value1 = malloc(sizeof(int));
+	*(int *)value1 = 100;
+	void *value2 = malloc(sizeof(int));
+	*(int *)value2 = 200;
+	void *value3 = malloc(sizeof(int));
+	*(int *)value3 = 300;
+	void *value4 = malloc(sizeof(int));
+	*(int *)value4 = 400;
+	void *value5 = malloc(sizeof(int));
+	*(int *)value5 = 500;
+	add_to_list(&list,value1);
+	add_to_list(&list,value2);
+	add_to_list(&list,value3);
+	add_to_list(&list,value4);
+	add_to_list(&list,value5);
+	int initialValue = 0,hint=0;
+	assert(*(int *)reduce(list,sum,&hint,&initialValue)==1500);
+}
